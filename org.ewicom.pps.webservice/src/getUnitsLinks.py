@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 from pps.webservice import utils
 from pps.webservice import parser
+from pps.webservice import dbhelper
 import datetime
 
 firstPage = 'http://www.sw.gov.pl/pl/jednostki/'
@@ -17,5 +18,6 @@ while(page is not None):
         page = None
 
 utils.saveUnitsLinksToFile(unitsLinks)
-
 utils.saveScriptInfo('Pobrano linki jednostek: ILOSC: ' + str(len(unitsLinks)) + ' DATA: ' + str(datetime.datetime.now()) + '\n')
+
+dbhelper.updateUnitTable()

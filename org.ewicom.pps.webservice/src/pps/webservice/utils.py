@@ -59,3 +59,40 @@ def saveScriptInfo(info):
     else:
         f.write(info)
         f.close()
+
+def getFirstUnitLink():
+    """
+    Funkcja pobiera pierwszy link z jednostką w pliku links.txt
+    
+    Zwraca link do jednostki
+    """
+    
+    fileName = 'links.txt'
+    
+    try:
+        f = open(fileName,'r')
+        link = f.readline()
+        link = link.strip()
+    except IOError:
+        print 'Blad dostepu do pliku: '+fileName
+    else:
+        f.close()
+        return link
+
+def deleteFirstUnitLink():
+    """
+    Funkcja usuwa pierwszy link z pliku links.txt
+    
+    """
+    fileName = 'links.txt'
+    
+    try:
+        f = open(fileName,'r')
+        links = f.readlines()
+        f.close()
+        f = open(fileName,'w')
+        f.write(''.join(links[1:]))
+    except IOError:
+        print 'Blad dostepu do pliku: '+fileName
+    else:
+        f.close()
