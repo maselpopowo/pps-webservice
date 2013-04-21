@@ -17,10 +17,10 @@ def getUnitsNextPageLink(content):
     """
     soup = BeautifulSoup(content)
     
-    link = soup.find('a',text="Następna")
+    link = soup.find('a', text="Następna")
     
     if link is not None:
-        return 'http://sw.gov.pl'+link['href']
+        return 'http://sw.gov.pl' + link['href']
     else:
         return None
 
@@ -33,7 +33,7 @@ def getUnitsLinks(content):
     soup = BeautifulSoup(content)
     
     divs = soup.find_all('div', class_='left')
-    links = ['http://sw.gov.pl'+div.a['href'] for div in divs]
+    links = ['http://sw.gov.pl' + div.a['href'] for div in divs]
     
     return links
 
@@ -49,9 +49,9 @@ def getUnitIdAndParent(link):
     parent = part[-3]
     
     if unit == 'centralny-zarzad-sw' or parent == 'pl':
-        d = {'unit_id':unit,'parent_id':unit}
+        d = {'unit_id':unit, 'parent_id':unit}
     else:
-        d = {'unit_id':unit,'parent_id':parent}
+        d = {'unit_id':unit, 'parent_id':parent}
     
     return d
 
@@ -95,9 +95,9 @@ def getMapCoordinate(content):
     unit_longitude = soup.find(id='mapka_Longitude')
     
     if unit_latitude is not None or unit_longitude is not None:
-        s = {'unit_latitude':unit_latitude['value'],'unit_longitude':unit_longitude['value']}
+        s = {'unit_latitude':unit_latitude['value'], 'unit_longitude':unit_longitude['value']}
     else:
-        s = {'unit_latitude':None,'unit_longitude':None}
+        s = {'unit_latitude':None, 'unit_longitude':None}
     
     return s
 
@@ -124,9 +124,82 @@ def getBasicUnitInformations(content):
     unit_email_p = p[3].string
     unit_email = unit_email_p[8:].strip()
     
-    d = {'unit_street':unit_street,'unit_postcode':unit_postcode,'unit_city':unit_city,'unit_phone':unit_phone,'unit_email':unit_email}
+    d = {'unit_street':unit_street, 'unit_postcode':unit_postcode, 'unit_city':unit_city, 'unit_phone':unit_phone, 'unit_email':unit_email}
         
     return d
 
-
+def getUnitImages(content):
+    """
+    Funkcja pobiera linki do zdjec jednostki
     
+    Zwaraca slownik z 2 linkami
+    """
+    soup = BeautifulSoup(content)
+    
+    div = soup.find('div', class_='pad')
+    
+    a = div.find('a')
+    
+    if a is not None:
+        unit_simg = 'http://sw.gov.pl/pl' + a['href']
+        unit_img = 'http://sw.gov.pl/pl' + a.img['src']
+    else:
+        unit_simg = None
+        unit_img = None
+    
+    d = {'unit_simg':unit_simg, 'unit_img':unit_img}
+    return d
+
+def getDefaultDescription(content):
+    """
+    Funkcja pobiera opis podstawowy jednostki
+    
+    Zwraca string
+    """
+    soup = BeautifulSoup(content)
+    
+    desc = soup.find(id='opispodstawowy')
+    
+    if desc is not None:
+        return desc.get_text()
+    else:
+        return None
+
+def getLeaders(content):
+    """
+    Funkcja pobiera dane o kierownictwie
+    
+    Zwraca liste kierownictwa
+    """
+    soup = BeautifulSoup(content)
+    
+    mdiv = soup.find('div', class_='praca-margines tab-leaders-content')
+    
+    divs = mdiv.find_all('div')
+
+    keys = {1:'position', 2:'name', 3:'phone', 4:'email'}
+    
+    if not divs:
+        print 'Brak danych dla kierwonictwa'
+    else:
+        i = 1
+        leaders = []
+        l = {}
+        for d in divs:
+            if d.get('class') == ['first-l']:
+                if l:
+                    leaders.append(l)
+                i = 1
+                l = {}
+            if d.get('class') == ['jedn-linia']:
+                leaders.append(l)
+            else:
+                l[keys[i]] = d.get_text().strip()
+                i = i + 1
+    
+    for l in leaders:
+        l[keys[3]] = (l[keys[3]])[10:]
+        if len(l) == 4:
+            l[keys[4]] = (l[keys[4]])[8:]
+    
+    return leaders
