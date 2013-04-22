@@ -8,6 +8,7 @@ Modul udostepnia dane do parsowania strony sw.gov.pl
 @version: 0.1
 '''
 from bs4 import BeautifulSoup
+from pps.webservice import ppsvar
 
 def getUnitsNextPageLink(content):
     """
@@ -17,10 +18,10 @@ def getUnitsNextPageLink(content):
     """
     soup = BeautifulSoup(content)
     
-    link = soup.find('a', text="Następna")
+    link = soup.find('a', text=ppsvar.NEXT_PAGE_TEXT)
     
     if link is not None:
-        return 'http://sw.gov.pl' + link['href']
+        return ppsvar.LINK_START_TEXT + link['href']
     else:
         return None
 
@@ -33,7 +34,7 @@ def getUnitsLinks(content):
     soup = BeautifulSoup(content)
     
     divs = soup.find_all('div', class_='left')
-    links = ['http://sw.gov.pl' + div.a['href'] for div in divs]
+    links = [ppsvar.LINK_START_TEXT + div.a['href'] for div in divs]
     
     return links
 
@@ -48,10 +49,10 @@ def getUnitIdAndParent(link):
     unit = part[-2]
     parent = part[-3]
     
-    if unit == 'centralny-zarzad-sw' or parent == 'pl':
-        d = {'unit_id':unit, 'parent_id':unit}
+    if unit == ppsvar.CZSW_ID or parent == 'pl':
+        d = {ppsvar.UNIT_ID:unit, ppsvar.UNIT_PARENT:unit}
     else:
-        d = {'unit_id':unit, 'parent_id':parent}
+        d = {ppsvar.UNIT_ID:unit, ppsvar.UNIT_PARENT:parent}
     
     return d
 
@@ -70,7 +71,7 @@ def getUnitName(content):
     else:
         return unit_name.strip()
 
-def getShortUnitName(content):
+def getUnitShortName(content):
     """
     Funkcja pobiera skrucona nazwe jednostki
     
@@ -97,7 +98,7 @@ def getMapCoordinate(content):
     if unit_latitude is not None or unit_longitude is not None:
         s = {'unit_latitude':unit_latitude['value'], 'unit_longitude':unit_longitude['value']}
     else:
-        s = {'unit_latitude':None, 'unit_longitude':None}
+        s = {'unit_latitude':'', 'unit_longitude':''}
     
     return s
 
@@ -124,7 +125,7 @@ def getBasicUnitInformations(content):
     unit_email_p = p[3].string
     unit_email = unit_email_p[8:].strip()
     
-    d = {'unit_street':unit_street, 'unit_postcode':unit_postcode, 'unit_city':unit_city, 'unit_phone':unit_phone, 'unit_email':unit_email}
+    d = {ppsvar.UNIT_STREET:unit_street, ppsvar.UNIT_POSTCODE:unit_postcode, ppsvar.UNIT_CITY:unit_city, ppsvar.UNIT_PHONE:unit_phone, ppsvar.UNIT_EMAIL:unit_email}
         
     return d
 
@@ -141,13 +142,13 @@ def getUnitImages(content):
     a = div.find('a')
     
     if a is not None:
-        unit_simg = 'http://sw.gov.pl/pl' + a['href']
-        unit_img = 'http://sw.gov.pl/pl' + a.img['src']
+        unit_simg = ppsvar.LINK_START_TEXT + a['href']
+        unit_img = ppsvar.LINK_START_TEXT + a.img['src']
     else:
-        unit_simg = None
-        unit_img = None
+        unit_simg = ''
+        unit_img = ''
     
-    d = {'unit_simg':unit_simg, 'unit_img':unit_img}
+    d = {ppsvar.UNIT_SIMG:unit_simg, ppsvar.UNIT_IMG:unit_img}
     return d
 
 def getDefaultDescription(content):
@@ -158,12 +159,12 @@ def getDefaultDescription(content):
     """
     soup = BeautifulSoup(content)
     
-    desc = soup.find(id='opispodstawowy')
+    desc = soup.find(id=ppsvar.DEF_DESC_TEXT)
     
     if desc is not None:
         return desc.get_text()
     else:
-        return None
+        return ''
 
 def getLeaders(content):
     """
