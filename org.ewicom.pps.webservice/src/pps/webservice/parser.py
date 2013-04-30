@@ -49,10 +49,10 @@ def getUnitIdAndParent(link):
     unit = part[-2]
     parent = part[-3]
     
-    if unit == ppsvar.CZSW_ID or parent == 'pl':
-        d = {ppsvar.UNIT_ID:unit, ppsvar.UNIT_PARENT:unit}
+    if unit == ppsvar.CZSW_TEXTID or parent == 'pl':
+        d = {ppsvar.UNIT_TEXTID:unit, ppsvar.UNIT_PARENT:unit}
     else:
-        d = {ppsvar.UNIT_ID:unit, ppsvar.UNIT_PARENT:parent}
+        d = {ppsvar.UNIT_TEXTID:unit, ppsvar.UNIT_PARENT:parent}
     
     return d
 
@@ -174,17 +174,17 @@ def getLeaders(content):
     """
     soup = BeautifulSoup(content)
     
-    mdiv = soup.find('div', class_='praca-margines tab-leaders-content')
+    mdiv = soup.find('div', class_=ppsvar.LEADER_CLASS)
     
     divs = mdiv.find_all('div')
 
-    keys = {1:'position', 2:'name', 3:'phone', 4:'email'}
+    keys = {1:ppsvar.LEADER_POSITION, 2:ppsvar.LEADER_NAME, 3:ppsvar.LEADER_PHONE, 4:ppsvar.LEADER_EMAIL}
     
-    if not divs:
-        print 'Brak danych dla kierwonictwa'
+    leaders = []
+    if len(divs) == 1:
+        return leaders
     else:
         i = 1
-        leaders = []
         l = {}
         for d in divs:
             if d.get('class') == ['first-l']:
@@ -202,5 +202,36 @@ def getLeaders(content):
         l[keys[3]] = (l[keys[3]])[10:]
         if len(l) == 4:
             l[keys[4]] = (l[keys[4]])[8:]
+        else:
+            l[keys[4]] = ''
     
     return leaders
+
+def getPhones(content):
+    """
+    Funkcja pobiera dane o waznych telefonach
+    
+    Zwraca tablise slownikow
+    """
+    soup = BeautifulSoup(content)
+    phones = []
+    
+    mdiv = soup.find('div', class_=ppsvar.PHONES_CLASS)
+    
+    #None dla bledu linku, strona inna niz jednostki
+    if mdiv is not None:
+        #None dla braku telefonow w jednostce
+        if mdiv.div is not None:
+            divs = mdiv.div.find_all('div')
+            #sa telefony w jednostce  
+            if divs:
+                for d in divs:
+                    pname = d.b.extract()
+                    pname = (pname.get_text().strip())[:-1]
+                    
+                    pnumber = d.get_text().strip()
+                    
+                    phone = {ppsvar.PHONE_NAME:pname,ppsvar.PHONE_NUMBER:pnumber}
+                    phones.append(phone)
+    
+    return phones
