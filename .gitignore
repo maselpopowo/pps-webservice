@@ -1,0 +1,8 @@
+*.py[cod]
+
+info.txt
+links.txt
+
+test.py
+
+.settings
