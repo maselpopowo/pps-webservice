@@ -4,11 +4,19 @@ Created on 22-04-2013
 
 @author: 001289mkun
 '''
+FIRST_PAGE = 'http://www.sw.gov.pl/pl/jednostki/'
+
+LINKS_FILE = 'links.txt'
+INFO_FILE = 'info.txt'
+LOG_FILE = 'log.txt'
+
 NEXT_PAGE_TEXT = 'Następna'
 LINK_START_TEXT = 'http://sw.gov.pl'
 DEF_DESC_TEXT = 'opispodstawowy'
 LEADER_CLASS = 'praca-margines tab-leaders-content'
 PHONES_CLASS = 'praca-margines tab-importantPh-content'
+MAP_LATITUDE_ID = 'mapka_Latitude'
+MAP_LONGITUDE_ID = 'mapka_Longitude'
 
 CZSW_TEXTID = 'centralny-zarzad-sw'
 

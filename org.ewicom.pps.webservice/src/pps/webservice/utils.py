@@ -8,6 +8,8 @@ Modul zawiera pomocnicze funkcje dla pakietu
 @version: 0.1
 '''
 import urllib2
+from pps.webservice import ppsvar
+import datetime
 
 def getContent(url):
     """
@@ -15,49 +17,52 @@ def getContent(url):
     
     Zwraca pobrana strone
     """
-    request = urllib2.Request(url)
-    
-    try:
-        response = urllib2.urlopen(request)
-    except urllib2.URLError as e:
-        if hasattr(e, 'reason'):
-            print 'We failed to reach a server.'
-            print 'Reason: ', e.reason
-        elif hasattr(e, 'code'):
-            print 'The server couldn\'t fulfill the request.'
-            print 'Error code: ', e.code
+    if url is not None:
+        request = urllib2.Request(url)
+        
+        try:
+            response = urllib2.urlopen(request)
+        except urllib2.URLError as e:
+            if hasattr(e, 'reason'):
+                print 'We failed to reach a server.'
+                print 'Reason: ', e.reason
+            elif hasattr(e, 'code'):
+                print 'The server couldn\'t fulfill the request.'
+                print 'Error code: ', e.code
+        except ValueError as e:
+            print 'Problem z adresem strony: ', e
+            return None
+        else:
+            page = response.read()
+            return page
     else:
-        page = response.read()
-        return page
+        return None
+
 
 def saveUnitsLinksToFile(linkList):
     """
     Funkacja zapisuje do pliku liste linkow do jednostek
     
     """
-    fileName = 'links.txt'
-    
-    try:
-        f = open(fileName,'a')
-    except IOError:
-        print 'blad dostepu do pliku'
-    else:
-        f.write('\n'.join(linkList))
-        f.close()
+    if linkList:
+        try:
+            f = open(ppsvar.LINKS_FILE,'a')
+        except IOError:
+            print 'blad dostepu do pliku'
+        else:
+            f.write('\n'.join(linkList))
+            f.close()
 
-def saveScriptInfo(info):
+def log(info):
     """
-    Funkcja zapisuje inforacje z wykonania skryptu. Funkcja potrzebuje stringa
+    Funkcja logujaca
     """
-    
-    fileName = 'info.txt'
-    
     try:
-        f = open(fileName,'a')
+        f = open(ppsvar.LOG_FILE,'a')
     except IOError:
-        print 'blad dostepu do pliku'
+        print 'Blad dostepu do pliku z funkcji logujacej'
     else:
-        f.write(info)
+        f.write(str(datetime.datetime.now())+' '+info+'\n')
         f.close()
 
 def getFirstUnitLink():
@@ -66,15 +71,12 @@ def getFirstUnitLink():
     
     Zwraca link do jednostki
     """
-    
-    fileName = 'links.txt'
-    
     try:
-        f = open(fileName,'r')
+        f = open(ppsvar.LINKS_FILE,'r')
         link = f.readline()
         link = link.strip()
     except IOError:
-        print 'Blad dostepu do pliku: '+fileName
+        print 'Blad dostepu do pliku: '+ppsvar.LINKS_FILE
     else:
         f.close()
         return link
@@ -84,15 +86,14 @@ def deleteFirstUnitLink():
     Funkcja usuwa pierwszy link z pliku links.txt
     
     """
-    fileName = 'links.txt'
-    
     try:
-        f = open(fileName,'r')
+        f = open(ppsvar.LINKS_FILE,'r')
         links = f.readlines()
         f.close()
-        f = open(fileName,'w')
+        
+        f = open(ppsvar.LINKS_FILE,'w')
         f.write(''.join(links[1:]))
     except IOError:
-        print 'Blad dostepu do pliku: '+fileName
+        print 'Blad dostepu do pliku: '+ppsvar.LINKS_FILE
     else:
         f.close()
