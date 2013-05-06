@@ -4,7 +4,6 @@ from pps.webservice import parser
 from pps.webservice import db_helper
 from pps.webservice import ppsvar
 
-
 unitId = db_helper.getOldestUnit()
 
 if unitId is not None:
@@ -66,4 +65,3 @@ if unitId is not None:
         utils.log('Nie mozna pobrac strony jednostki: ' + unit[ppsvar.UNIT_TEXTID])
 else:
     utils.log('Pobrano None dla najstarszej jednostki w bazie')
-    

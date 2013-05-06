@@ -8,7 +8,7 @@ Modul udostepnia dane do parsowania strony sw.gov.pl
 @version: 0.1
 '''
 from bs4 import BeautifulSoup
-from pps.webservice import ppsvar
+from pps.webservice import ppsvar, utils
 
 class UnitsLinksParseError(Exception):
     """
@@ -64,9 +64,9 @@ def getUnitsNextPageLink(content):
         else:
             return None
 
-def getUnitsLinks(content):
+def getUnitsOnPageLinks(content):
     """
-    Funkcja pobiera linki do stron jednostek podstawowych
+    Funkcja pobiera linki do stron jednostek podstawowych z pojedynczej strony zbiorczej
     
     Zwraca liste linkow
     """
@@ -77,6 +77,45 @@ def getUnitsLinks(content):
         divs = soup.find_all('div', class_='left')
         if divs:
             links = [ppsvar.LINK_START_TEXT + div.a['href'] for div in divs]
+    except AttributeError as e:
+        raise UnitsLinksParseError(e)
+    else:
+        return links
+
+def getUnitsLinks():
+    """
+    Funkcja pobiera linki jednostek podsawowych
+    
+    Zwraca liste linkow
+    """
+    page = utils.getContent(ppsvar.FIRST_PAGE)
+    links = []
+
+    while(page is not None):
+        links.extend(getUnitsOnPageLinks(page))
+        nlink = getUnitsNextPageLink(page)
+        if nlink is not None:
+            page = utils.getContent(nlink)
+        else:
+            page = None
+    
+    return links
+
+def getDepartmentsLinks():
+    """
+    Funkcja zwraca linki do biur i zespolow podleglych czsw
+    
+    Zwraca liste linkow
+    """
+    content = utils.getContent(ppsvar.CZSW_PAGE)
+    soup = BeautifulSoup(content)
+    links = []
+    
+    try:
+        ul = soup.find('ul',class_='poziom3')
+        lis = ul.find_all('li')
+        if lis:
+            links = [ppsvar.LINK_START_TEXT + li.a['href'] for li in lis]
     except AttributeError as e:
         raise UnitsLinksParseError(e)
     else:

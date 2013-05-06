@@ -5,6 +5,7 @@ Created on 22-04-2013
 @author: 001289mkun
 '''
 FIRST_PAGE = 'http://www.sw.gov.pl/pl/jednostki/'
+CZSW_PAGE = 'http://www.sw.gov.pl/pl/o-sluzbie-wieziennej/centralny-zarzad-sw/'
 
 LINKS_FILE = 'links.txt'
 INFO_FILE = 'info.txt'
