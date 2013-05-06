@@ -107,10 +107,12 @@ def getUnitName(content):
     Zwraca nazwe jednostki - string
     """
     soup = BeautifulSoup(content)
-    
     try:
-        unit_name = soup.find('div', class_='jednostka').h3.string
-        unit_name = unit_name.strip()
+        divs = soup.find_all('div', class_='jednostka')
+        for d in divs:
+            if d.find('h3'):
+                unit_name = d.h3.string
+                unit_name = unit_name.strip()
     except AttributeError as e:
         raise UnitParseError(e)
     else:
@@ -162,20 +164,22 @@ def getBasicUnitInformations(content):
     soup = BeautifulSoup(content)
     
     try:
-        div = soup.find('div', class_='jednostka')
-        p = div.find_all('p')
-        
-        unit_street = (p[0].string).strip()
-        
-        unit_tc = (p[1].string).strip()
-        unit_postcode = unit_tc[0:6]
-        unit_city = unit_tc[7:]
-        
-        unit_phone_p = p[2].string
-        unit_phone = unit_phone_p[10:].strip()
-        
-        unit_email_p = p[3].string
-        unit_email = unit_email_p[8:].strip()
+        div = soup.find_all('div', class_='jednostka')
+        for d in div:
+            if d.h3:
+                p = d.find_all('p')
+                
+                unit_street = (p[0].string).strip()
+                
+                unit_tc = (p[1].string).strip()
+                unit_postcode = unit_tc[0:6]
+                unit_city = unit_tc[7:]
+                
+                unit_phone_p = p[2].string
+                unit_phone = unit_phone_p[10:].strip()
+                
+                unit_email_p = p[3].string
+                unit_email = unit_email_p[8:].strip()
     except AttributeError as e:
         raise UnitParseError(e)
     else:
@@ -197,7 +201,10 @@ def getUnitImages(content):
     
     try:
         div = soup.find('div', class_='pad') 
-        a = div.find('a')
+        if div is not None:
+            a = div.find('a')
+        else:
+            a = None
     except AttributeError as e:
         raise UnitParseError(e)
     else:
@@ -227,7 +234,7 @@ def getDefaultDescription(content):
         
     return d
 
-def getLeaders(content):
+def getUnitLeaders(content):
     """
     Funkcja pobiera dane o kierownictwie
     
@@ -258,10 +265,11 @@ def getLeaders(content):
                     i = 1
                     l = {}
                 if d.get('class') == ['jedn-linia']:
-                    leaders.append(l)
+                    continue
                 else:
                     l[keys[i]] = d.get_text().strip()
                     i = i + 1
+            leaders.append(l)
         
         for l in leaders:
             l[keys[3]] = (l[keys[3]])[10:]
@@ -271,6 +279,48 @@ def getLeaders(content):
                 l[keys[4]] = ''
     
     return leaders
+
+def getCzswLeaders(content):
+    """
+    Funkcja pobiera dane o kierownictwie czsw
+    
+    Zwraca liste kierownictwa
+    """
+    soup = BeautifulSoup(content)
+    keys = {1:ppsvar.LEADER_POSITION, 
+            2:ppsvar.LEADER_NAME, 
+            3:ppsvar.LEADER_PHONE, 
+            4:ppsvar.LEADER_EMAIL}
+    leaders = []
+    
+    try:
+        mdiv = soup.find('div', class_=ppsvar.LEADER_CLASS)
+        divs = mdiv.find_all('div', class_='leader-zd')
+    except AttributeError as e:
+        raise LeadersParseError(e)
+    else:
+        for div in divs:
+            l = {}
+            i = 1
+            for d in div.find_all('div'):
+                    l[keys[i]] = d.get_text().strip()
+                    i = i + 1
+            leaders.append(l)
+    
+        for l in leaders:
+            l[keys[3]] = (l[keys[3]])[10:]
+            if len(l) == 4:
+                l[keys[4]] = (l[keys[4]])[8:]
+            else:
+                l[keys[4]] = ''
+    
+    return leaders
+
+def getLeaders(content,unitTextId):
+    if unitTextId == ppsvar.CZSW_TEXTID:
+        return getCzswLeaders(content)
+    else:
+        return getUnitLeaders(content)
 
 def getPhones(content):
     """
