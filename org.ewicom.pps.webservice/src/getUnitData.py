@@ -1,11 +1,11 @@
 # -*- coding: utf8 -*-
 from pps.webservice import utils
 from pps.webservice import parser
-from pps.webservice import dbhelper
+from pps.webservice import db_helper
 from pps.webservice import ppsvar
 
 
-unitId = dbhelper.getOldestUnit()
+unitId = db_helper.getOldestUnit()
 
 if unitId is not None:
     unit = {}
@@ -42,7 +42,7 @@ if unitId is not None:
             utils.log(str(e) + unit[ppsvar.UNIT_TEXTID])
             utils.log('Blad aktalizacji danych jednostki: ' + unit[ppsvar.UNIT_TEXTID])
         else:
-            dbhelper.insertUnitDate(unit)
+            db_helper.insertUnitDate(unit)
             utils.log('Zaktualizowano dane jednostki: ' + unit[ppsvar.UNIT_TEXTID])
         
         try:
@@ -50,7 +50,7 @@ if unitId is not None:
         except parser.LeadersParseError as e:
             utils.log(str(e) + unit[ppsvar.UNIT_TEXTID])
         else:
-            dbhelper.insertUnitLeaders(leaders, unit[ppsvar.UNIT_ID])
+            db_helper.insertUnitLeaders(leaders, unit[ppsvar.UNIT_ID])
             utils.log('Zaktualizowano kierownictwo: ' + unit[ppsvar.UNIT_TEXTID])
         
         try:
@@ -58,10 +58,10 @@ if unitId is not None:
         except parser.PhonesParseError as e:
             utils.log(str(e) + unit[ppsvar.UNIT_TEXTID])
         else:
-            dbhelper.insertUnitPhones(phones, unit[ppsvar.UNIT_ID])
+            db_helper.insertUnitPhones(phones, unit[ppsvar.UNIT_ID])
             utils.log('Zaktualizowano telefony: ' + unit[ppsvar.UNIT_TEXTID])
         
-        dbhelper.updateUnitLastModified(unit[ppsvar.UNIT_ID])
+        db_helper.updateUnitLastModified(unit[ppsvar.UNIT_ID])
     else:
         utils.log('Nie mozna pobrac strony jednostki: ' + unit[ppsvar.UNIT_TEXTID])
 else:

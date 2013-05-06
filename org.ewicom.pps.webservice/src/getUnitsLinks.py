@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 from pps.webservice import utils
 from pps.webservice import parser
-from pps.webservice import dbhelper
+from pps.webservice import db_helper
 from pps.webservice import ppsvar
 
 unitsLinks = []
@@ -18,4 +18,4 @@ while(page is not None):
 utils.saveUnitsLinksToFile(unitsLinks)
 utils.log('Pobrano linki jednostek: ILOSC: ' + str(len(unitsLinks)) )
 
-dbhelper.updateUnitTable()
+db_helper.updateUnitTable()
