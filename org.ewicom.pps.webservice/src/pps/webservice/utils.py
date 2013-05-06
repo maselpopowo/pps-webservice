@@ -38,6 +38,18 @@ def getContent(url):
     else:
         return None
 
+def getDBSettings():
+    """
+    Funkcja zwraca dsn dla polaczenia z baza na podstawie pliku
+    """
+    try:
+        f = open(ppsvar.DB_SETTINGS_FILE,'r')
+        lines = [line.strip() for line in f]
+    except IOError:
+        print 'Blad dostepu do pliku: '+ppsvar.DB_SETTINGS_FILE
+    else:
+        f.close()
+        return ' '.join(lines)
 
 def saveUnitsLinksToFile(linkList):
     """

@@ -10,8 +10,9 @@ import ppsvar
 
 def getConnection():
     try:
-        conn = psycopg2.connect('host=HOST dbname=DB user=USER password=PASS')
-    except psycopg2.DatabaseError as e:
+        dsn = utils.getDBSettings()
+        conn = psycopg2.connect(dsn)
+    except psycopg2.Error as e:
         utils.log('Problem z polaczeniem z baza danych: ' + repr(e))
     else:
         return conn
@@ -36,20 +37,21 @@ def updateUnitTable_old():
     
 def updateUnitTable():
     conn = getConnection()
-    cursor = conn.cursor()    
-
-    link = utils.getFirstUnitLink()
-    while link:
-        unitId = parser.getUnitIdAndParent(link)
+    if conn is not None:
+        cursor = conn.cursor()    
     
-        cursor.execute('SELECT merge_unit(%s,%s)', (unitId[ppsvar.UNIT_TEXTID], link))
-        conn.commit()
-    
-        utils.deleteFirstUnitLink()
         link = utils.getFirstUnitLink()
-
-    cursor.close()
-    conn.close()
+        while link:
+            unitId = parser.getUnitIdAndParent(link)
+        
+            cursor.execute('SELECT merge_unit(%s,%s)', (unitId[ppsvar.UNIT_TEXTID], link))
+            conn.commit()
+        
+            utils.deleteFirstUnitLink()
+            link = utils.getFirstUnitLink()
+    
+        cursor.close()
+        conn.close()
 
 def getOldestUnit():
     conn = getConnection()

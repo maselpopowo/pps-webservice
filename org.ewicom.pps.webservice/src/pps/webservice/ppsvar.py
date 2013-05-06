@@ -9,6 +9,7 @@ FIRST_PAGE = 'http://www.sw.gov.pl/pl/jednostki/'
 LINKS_FILE = 'links.txt'
 INFO_FILE = 'info.txt'
 LOG_FILE = 'log.txt'
+DB_SETTINGS_FILE = 'dbsettings.txt'
 
 NEXT_PAGE_TEXT = 'Następna'
 LINK_START_TEXT = 'http://sw.gov.pl'
