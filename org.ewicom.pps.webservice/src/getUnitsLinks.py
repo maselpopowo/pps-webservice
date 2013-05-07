@@ -1,4 +1,6 @@
-# -*- coding: utf8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from pps.webservice import utils
 from pps.webservice import parser
 from pps.webservice import db_helper

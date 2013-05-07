@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 '''
 Modul zawiera pomocnicze funkcje dla pakietu
 

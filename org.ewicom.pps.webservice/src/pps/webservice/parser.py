@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 '''
 Modul udostepnia dane do parsowania strony sw.gov.pl
 
