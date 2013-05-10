@@ -133,7 +133,7 @@ def getUnitIdAndParent(link):
     parent = part[-3]
     
     if unit == ppsvar.CZSW_TEXTID or parent == 'pl':
-        d = {ppsvar.UNIT_TEXTID:unit, ppsvar.UNIT_PARENT:unit}
+        d = {ppsvar.UNIT_TEXTID:unit, ppsvar.UNIT_PARENT:ppsvar.CZSW_TEXTID}
     else:
         d = {ppsvar.UNIT_TEXTID:unit, ppsvar.UNIT_PARENT:parent}
     
@@ -173,6 +173,24 @@ def getUnitShortName(content):
         raise UnitParseError(e)
     else:
         return unit_sname
+    
+def getUnitListNameAndType(sname):
+    """
+    Funkcja pobiera nazwe dla listwy i id typu
+    
+    Zwraca slownik
+    """
+    for r in ppsvar.UNITTYPE_REG:
+        if sname.find(r[ppsvar.UNITTYPE_REG_INDEX_WZOR]) != -1:
+            reszta = (sname.lstrip(r[ppsvar.UNITTYPE_REG_INDEX_WZOR])).strip()
+            if reszta:
+                lname = r[ppsvar.UNITTYPE_REG_INDEX_WYNIK] % (reszta)
+                return {ppsvar.UNIT_LNAME:lname,ppsvar.UNITTYPE_ID:r[ppsvar.UNITTYPE_REG_INDEX_ID]}
+            else:
+                lname = r[ppsvar.UNITTYPE_REG_INDEX_WYNIK]
+                return {ppsvar.UNIT_LNAME:lname,ppsvar.UNITTYPE_ID:r[ppsvar.UNITTYPE_REG_INDEX_ID]}
+    
+    raise UnitParseError('Brak typu dla jednostki')
 
 def getMapCoordinate(content):
     """
