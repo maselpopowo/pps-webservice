@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: UTF-8 -*-
 '''
 Created on 22-04-2013
 
@@ -12,7 +12,7 @@ INFO_FILE = 'info.txt'
 LOG_FILE = 'log.txt'
 DB_SETTINGS_FILE = 'dbsettings.txt'
 
-NEXT_PAGE_TEXT = 'Następna'
+NEXT_PAGE_TEXT = u"Nast\u0119pna"
 LINK_START_TEXT = 'http://sw.gov.pl'
 DEF_DESC_TEXT = 'opispodstawowy'
 LEADER_CLASS = 'praca-margines tab-leaders-content'
@@ -88,15 +88,15 @@ UNITTYPE_REG_INDEX_WZOR = 0
 UNITTYPE_REG_INDEX_ID = 1
 UNITTYPE_REG_INDEX_WYNIK = 2
 
-UNITTYPE_REG = [['Areszt Śledczy',UNITTYPE_ID_AS,'%s AŚ'],
-                ['Zakład Karny',UNITTYPE_ID_ZK,'%s ZK'],
-                ['Okręgowy Inspektorat Służby Więziennej',UNITTYPE_ID_OISW,'%s OISW'],
-                ['Centralny Zarząd SW',UNITTYPE_ID_CZSW,'Centralny Zarząd SW'],
-                ['Centralny Ośrodek Szkolenia Służby Więziennej w Kaliszu',UNITTYPE_ID_COSSW,'Kalisz COSSW'],
-                ['Ośrodek Szkolenia Służby Więziennej w Kulach',UNITTYPE_ID_OSSW,'Kule OSSW'],
-                ['Ośrodek Szkolenia SW w Kulach Oddział Zamiejscowy w Sulejowie',UNITTYPE_ID_OZM,'Sulejów OZ Kule OSSW'],
-                ['Ośrodek Szkolenia Służby Więziennej w Popowie',UNITTYPE_ID_OSSW,'Popowo OSSW'],
-                ['Ośrodek Doskonalenia Kadr Służby Więziennej w Suchej',UNITTYPE_ID_ODKSW,'Sucha ODKSW'],
-                ['Biuro',UNITTYPE_ID_BIURO,'%s BIURO'],
-                ['Zespół',UNITTYPE_ID_ZESPOL,'%s ZESPÓŁ'],
-                ['Oddział Zewnętrzny',UNITTYPE_ID_OZ,'%s OZ']]
+UNITTYPE_REG = [[u"Areszt \u015aledczy",UNITTYPE_ID_AS,u"%s A\u015a"],
+                [u"Zak\u0142ad Karny",UNITTYPE_ID_ZK,u"%s ZK"],
+                [u"Okr\u0119gowy Inspektorat S\u0142u\u017cby Wi\u0119ziennej",UNITTYPE_ID_OISW,u"%s OISW"],
+                [u"Centralny Zarz\u0105d SW",UNITTYPE_ID_CZSW,u"Centralny Zarz\u0105d SW"],
+                [u"Centralny O\u015brodek Szkolenia S\u0142u\u017cby Wi\u0119ziennej w Kaliszu",UNITTYPE_ID_COSSW,u"Kalisz COSSW"],
+                [u"O\u015brodek Szkolenia S\u0142u\u017cby Wi\u0119ziennej w Kulach",UNITTYPE_ID_OSSW,u"Kule OSSW"],
+                [u"O\u015brodek Szkolenia SW w Kulach Oddzia\u0142 Zamiejscowy w Sulejowie",UNITTYPE_ID_OZM,u"Sulej\u00f3w OZ Kule OSSW"],
+                [u"O\u015brodek Szkolenia S\u0142u\u017cby Wi\u0119ziennej w Popowie",UNITTYPE_ID_OSSW,u"Popowo OSSW"],
+                [u"O\u015brodek Doskonalenia Kadr S\u0142u\u017cby Wi\u0119ziennej w Suchej",UNITTYPE_ID_ODKSW,u"Sucha ODKSW"],
+                [u"Biuro",UNITTYPE_ID_BIURO,u"%s BIURO"],
+                [u"Zesp\u00f3\u0142",UNITTYPE_ID_ZESPOL,u"%s ZESP\u00d3\u0141"],
+                [u"Oddzia\u0142 Zewn\u0119trzny",UNITTYPE_ID_OZ,u"%s OZ"]]
