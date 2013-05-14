@@ -181,8 +181,8 @@ def getUnitListNameAndType(sname):
     Zwraca slownik
     """
     for r in ppsvar.UNITTYPE_REG:
-        if sname.find(r[ppsvar.UNITTYPE_REG_INDEX_WZOR]) != -1:
-            reszta = (sname.lstrip(r[ppsvar.UNITTYPE_REG_INDEX_WZOR])).strip()
+        if r[ppsvar.UNITTYPE_REG_INDEX_WZOR] in sname:
+            reszta = (sname[len(r[ppsvar.UNITTYPE_REG_INDEX_WZOR]):]).strip()
             if reszta:
                 lname = r[ppsvar.UNITTYPE_REG_INDEX_WYNIK] % (reszta)
                 return {ppsvar.UNIT_LNAME:lname,ppsvar.UNITTYPE_ID:r[ppsvar.UNITTYPE_REG_INDEX_ID]}
