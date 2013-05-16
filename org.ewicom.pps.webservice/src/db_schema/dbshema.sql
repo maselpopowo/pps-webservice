@@ -165,4 +165,10 @@ INSERT INTO unittype VALUES (9, 'Oddział Zamiejscowy', 'OZM');
 INSERT INTO unittype VALUES (10, 'Biuro', 'Biuro');
 INSERT INTO unittype VALUES (11, 'Zespół', 'Zespół');
 
+--VIEWS
+CREATE VIEW unit_list (unit_id, unit_lname, parent_id, parent_lname) AS 
+SELECT u.unit_id, d.unit_lname, u.unit_parentid, (SELECT details.unit_lname FROM details WHERE details.unit_id=u.unit_parentid) 
+FROM unit u JOIN details d ON (u.unit_id=d.unit_id) 
+ORDER BY d.unit_lname ASC 
+
 --KOniec

@@ -125,3 +125,92 @@ def getUnitTypeList():
     conn.close()
     
     return types
+
+def getUnitList():
+    conn = getConnection()
+    units = []
+    
+    if conn is not None:
+        cursor = conn.cursor()
+        
+        cursor.execute(ppsvar.SQL_SELECT_UNIT_LIST)
+        res = cursor.fetchall()
+        
+        if res:
+            for r in res:
+                units.append({ppsvar.UNIT_LIST_UNIT_ID:r[0],ppsvar.UNIT_LIST_UNIT_LNAME:r[1],ppsvar.UNIT_LIST_PARENT_ID:r[2],ppsvar.UNIT_LIST_PARENT_LNAME:r[3]})
+        
+        cursor.close()
+        conn.close()
+    
+    return units
+
+def getUnitPhones(unitId):
+    conn = getConnection()
+    phones = []
+    
+    if conn is not None:
+        cursor = conn.cursor()
+        
+        cursor.execute(ppsvar.SQL_SELECT_UNIT_PHONES, (unitId,))
+        res = cursor.fetchall()
+        
+        if res:
+            for r in res:
+                phones.append({ppsvar.PHONE_ID:r[0],ppsvar.PHONE_NAME:r[1],ppsvar.PHONE_NUMBER:r[2]})
+                
+        cursor.close()
+        conn.close()
+        
+    return phones
+
+def getUnitLeaders(unitId):
+    conn = getConnection()
+    leaders = []
+    
+    if conn is not None:
+        cursor = conn.cursor()
+        
+        cursor.execute(ppsvar.SQL_SELECT_UNIT_LEADERS, (unitId,))
+        res = cursor.fetchall()
+        
+        if res:
+            for r in res:
+                leaders.append({ppsvar.LEADER_ID:r[0],ppsvar.LEADER_POSITION:r[1],ppsvar.LEADER_NAME:r[2],ppsvar.LEADER_PHONE:r[3],ppsvar.LEADER_EMAIL:r[4]})
+                
+        cursor.close()
+        conn.close()
+        
+    return leaders
+
+def getUnitDetails(unitId):
+    conn = getConnection()
+    details = []
+    
+    if conn is not None:
+        cursor = conn.cursor()
+        
+        cursor.execute(ppsvar.SQL_SELECT_UNIT_DETAILS, (unitId,))
+        r = cursor.fetchone()
+        
+        if r is not None:
+            details.append({ppsvar.DETAILS_ID:r[0],
+                            ppsvar.UNITTYPE_ID:r[1],
+                            ppsvar.UNIT_NAME:r[2],
+                            ppsvar.UNIT_SNAME:r[3],
+                            ppsvar.UNIT_LNAME:r[4],
+                            ppsvar.UNIT_LATITUDE:r[5],
+                            ppsvar.UNIT_LONGITUDE:r[6],
+                            ppsvar.UNIT_STREET:r[7],
+                            ppsvar.UNIT_POSTCODE:r[8],
+                            ppsvar.UNIT_CITY:r[9],
+                            ppsvar.UNIT_PHONE:r[10],
+                            ppsvar.UNIT_EMAIL:r[11],
+                            ppsvar.UNIT_IMG:r[12],
+                            ppsvar.UNIT_SIMG:r[13],
+                            ppsvar.UNIT_DESCRIPTION:r[14]})
+                
+        cursor.close()
+        conn.close()
+        
+    return details

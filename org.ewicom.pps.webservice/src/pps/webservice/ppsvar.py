@@ -72,6 +72,11 @@ SQL_INSERT_PHONE = """INSERT INTO phone (unit_id,phone_name,phone_number) VALUES
 SQL_UPDATE_UNIT_LASTMODIFIED = """UPDATE unit SET unit_lastmodified=now() WHERE unit_id=%s"""
 SQL_SELECT_UNITTYPE = """SELECT unittype_id, unittype_name, unittype_symbol FROM unittype"""
 
+SQL_SELECT_UNIT_LIST = """SELECT unit_id, unit_lname, parent_id, parent_lname FROM unit_list ORDER BY unit_lname ASC"""
+SQL_SELECT_UNIT_PHONES = """SELECT phone_id, phone_name, phone_number FROM phone WHERE unit_id=%s"""
+SQL_SELECT_UNIT_LEADERS = """SELECT leader_id, leader_position, leader_name, leader_phone, leader_email FROM leader WHERE unit_id=%s"""
+SQL_SELECT_UNIT_DETAILS = """SELECT details_id, unittype_id, unit_name, unit_sname, unit_lname, unit_latitude, unit_longitude, unit_street, unit_postcode, unit_city, unit_phone, unit_email, unit_img, unit_simg, unit_description FROM details WHERE unit_id=%s"""
+
 UNITTYPE_ID_AS = 1
 UNITTYPE_ID_ZK = 2
 UNITTYPE_ID_OZ = 3
@@ -100,3 +105,14 @@ UNITTYPE_REG = [[u"Areszt \u015aledczy",UNITTYPE_ID_AS,u"%s A\u015a"],
                 [u"Biuro",UNITTYPE_ID_BIURO,u"%s BIURO"],
                 [u"Zesp\u00f3\u0142",UNITTYPE_ID_ZESPOL,u"%s ZESP\u00d3\u0141"],
                 [u"Oddzia\u0142 Zewn\u0119trzny",UNITTYPE_ID_OZ,u"%s OZ"]]
+
+UNIT_LIST_UNIT_ID = 'unit_id'
+UNIT_LIST_UNIT_LNAME = 'unit_lname'
+UNIT_LIST_PARENT_ID = 'parent_id'
+UNIT_LIST_PARENT_LNAME = 'parent_lname'
+
+JSON_CONTENT_TYPE = 'Content-type: application/json; charset=utf-8\n\n'
+
+JSON_DETAILS_ID = 'details'
+JSON_PHONES_ID = 'phones'
+JSON_LEADERS_ID = 'leaders'
